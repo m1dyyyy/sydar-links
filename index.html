@@ -92,14 +92,14 @@
             color: #fff;
             border: none;
             border-radius: 6px;
-            font-size: 13px;
+            fontSize: 13px;
             cursor: pointer;
             white-space: nowrap;
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container" id="appContainer">
         <h1>SYDAR Links</h1>
         <p>Быстрый сокращатель ссылок с поддержкой поддоменов</p>
         
@@ -122,9 +122,20 @@
     </div>
 
     <script>
+        // Проверяем, есть ли в ссылке ID для редиректа (например /abc123)
+        const path = window.location.pathname.replace('/', '').trim();
+        if (path.length > 0) {
+            const targetUrl = localStorage.getItem(path);
+            if (targetUrl) {
+                window.location.replace(targetUrl);
+            } else {
+                document.getElementById('appContainer').innerHTML = '<h1 style="color: #ef4444; font-size: 24px;">Ссылка не найдена или устарела</h1>';
+            }
+        }
+
         document.getElementById('shortForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const url = document.getElementById('urlInput').value;
+            const url = document.getElementById('urlInput'.trim()).value;
             const sub = document.getElementById('subInput').value.trim() || 's1';
             
             const id = Math.random().toString(36).substring(2, 8);
