@@ -69,6 +69,10 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background-color: #e0e0e0;
         }
         .result-box {
             margin-top: 24px;
@@ -92,16 +96,21 @@
             color: #fff;
             border: none;
             border-radius: 6px;
-            fontSize: 13px;
+            font-size: 13px;
             cursor: pointer;
             white-space: nowrap;
+            margin-top: 0;
+            width: auto;
+        }
+        .copy-btn:hover {
+            background-color: #444;
         }
     </style>
 </head>
 <body>
     <div class="container" id="appContainer">
         <h1>SYDAR Links</h1>
-        <p>Быстрый сокращатель ссылок с поддержкой поддоменов</p>
+        <p>Быстрый генератор ссылок с поддержкой поддоменов</p>
         
         <form id="shortForm">
             <div class="form-group">
@@ -112,35 +121,36 @@
                 <label>Поддомен</label>
                 <input type="text" id="subInput" value="s1" required>
             </div>
-            <button type="submit">Сократить ссылку</button>
+            <button type="submit">Создать ссылку</button>
         </form>
 
         <div class="result-box" id="resultBox">
             <span class="result-text" id="resultText"></span>
-            <button class="copy-btn" id="copyBtn" onclick="copyLink()">Копировать</button>
+            <button class="copy-btn" id="copyBtn" type="button" onclick="copyLink()">Копировать</button>
         </div>
     </div>
 
     <script>
-        // Проверяем, есть ли в ссылке ID для редиректа (например /abc123)
+        // Проверка пути для редиректа (например, /abc123)
         const path = window.location.pathname.replace('/', '').trim();
         if (path.length > 0) {
             const targetUrl = localStorage.getItem(path);
             if (targetUrl) {
                 window.location.replace(targetUrl);
             } else {
-                document.getElementById('appContainer').innerHTML = '<h1 style="color: #ef4444; font-size: 24px;">Ссылка не найдена или устарела</h1>';
+                document.getElementById('appContainer').innerHTML = '<h1 style="color: #ef4444; font-size: 22px; text-align: center;">Ссылка не найдена или устарела</h1>';
             }
         }
 
         document.getElementById('shortForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const url = document.getElementById('urlInput'.trim()).value;
+            const url = document.getElementById('urlInput').value.trim();
             const sub = document.getElementById('subInput').value.trim() || 's1';
             
             const id = Math.random().toString(36).substring(2, 8);
             const host = window.location.host;
             const parts = host.split('.');
+            // Корректно вырезаем базовый домен, если уже находимся на поддомене
             const base = parts.length > 2 ? parts.slice(1).join('.') : host;
             
             const shortUrl = `https://${sub}.${base}/${id}`;
