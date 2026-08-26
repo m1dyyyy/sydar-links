@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYDAR Links</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+        body {
+            min-height: 100vh;
+            background-color: #0a0a0a;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background-color: #121212;
+            border: 1px solid #222;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+        h1 {
+            font-size: 32px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 8px;
+            color: #ffffff;
+        }
+        p {
+            font-size: 14px;
+            color: #888;
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #aaa;
+        }
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 15px;
+            outline: none;
+        }
+        button {
+            margin-top: 8px;
+            width: 100%;
+            padding: 14px;
+            background-color: #ffffff;
+            color: #000000;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .result-box {
+            margin-top: 24px;
+            padding: 12px 16px;
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        .result-text {
+            font-size: 14px;
+            color: #4ade80;
+            word-break: break-all;
+        }
+        .copy-btn {
+            padding: 6px 12px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SYDAR Links</h1>
+        <p>Быстрый сокращатель ссылок с поддержкой поддоменов</p>
+        
+        <form id="shortForm">
+            <div class="form-group">
+                <label>Целевая ссылка</label>
+                <input type="url" id="urlInput" placeholder="https://example.com" required>
+            </div>
+            <div class="form-group">
+                <label>Поддомен</label>
+                <input type="text" id="subInput" value="s1" required>
+            </div>
+            <button type="submit">Сократить ссылку</button>
+        </form>
+
+        <div class="result-box" id="resultBox">
+            <span class="result-text" id="resultText"></span>
+            <button class="copy-btn" id="copyBtn" onclick="copyLink()">Копировать</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('shortForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const url = document.getElementById('urlInput').value;
+            const sub = document.getElementById('subInput').value.trim() || 's1';
+            
+            const id = Math.random().toString(36).substring(2, 8);
+            const host = window.location.host;
+            const parts = host.split('.');
+            const base = parts.length > 2 ? parts.slice(1).join('.') : host;
+            
+            const shortUrl = `https://${sub}.${base}/${id}`;
+            
+            localStorage.setItem(id, url);
+            
+            document.getElementById('resultText').textContent = shortUrl;
+            document.getElementById('resultBox').style.display = 'flex';
+        });
+
+        function copyLink() {
+            const text = document.getElementById('resultText').textContent;
+            navigator.clipboard.writeText(text);
+            const btn = document.getElementById('copyBtn');
+            btn.textContent = 'Скопировано!';
+            setTimeout(() => btn.textContent = 'Копировать', 2000);
+        }
+    </script>
+</body>
+</html>
