@@ -9,7 +9,7 @@ export default function Home() {
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleShorten = async (e: React.FormEvent) => {
+  const handleShorten = (e) => {
     e.preventDefault();
     if (!url) return;
     setLoading(true);
@@ -109,24 +109,24 @@ const styles = {
   title: {
     fontSize: "32px",
     fontWeight: "800",
-    textAlign: "center" as const,
+    textAlign: "center",
     marginBottom: "8px",
     color: "#ffffff",
   },
   subtitle: {
     fontSize: "14px",
     color: "#888",
-    textAlign: "center" as const,
+    textAlign: "center",
     marginBottom: "32px",
   },
   form: {
     display: "flex",
-    flexDirection: "column" as const,
+    flexDirection: "column",
     gap: "20px",
   },
   inputGroup: {
     display: "flex",
-    flexDirection: "column" as const,
+    flexDirection: "column",
     gap: "8px",
   },
   label: {
@@ -170,7 +170,7 @@ const styles = {
   resultText: {
     fontSize: "14px",
     color: "#4ade80",
-    wordBreak: "break-all" as const,
+    wordBreak: "break-all",
   },
   copyButton: {
     padding: "6px 12px",
